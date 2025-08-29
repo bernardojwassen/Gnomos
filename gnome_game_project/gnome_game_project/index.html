@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Fuga dos Gnomos de Jardim</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧙‍♂️ A Fuga dos Gnomos de Jardim</h1>
+            <p>Colete todos os itens da sua cor e chegue à linha de chegada antes dos outros gnomos!</p>
+        </header>
+
+        <div class="game-setup" id="gameSetup">
+            <div class="setup-card">
+                <h2>Configurar Jogo</h2>
+                <form id="setupForm">
+                    <div class="form-group">
+                        <label for="nomeJogador">Nome do Jogador:</label>
+                        <input type="text" id="nomeJogador" name="nomeJogador" required placeholder="Digite seu nome">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoGnomo">Tipo de Gnomo:</label>
+                        <select id="tipoGnomo" name="tipoGnomo" required>
+                            <option value="">Selecione um tipo</option>
+                            <option value="Veloz">Gnomo Veloz (Mais rápido, mas pode ser azarado)</option>
+                            <option value="Azarado">Gnomo Azarado (Mais lento, mas com sorte)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="corChapeu">Cor do Chapéu:</label>
+                        <div class="color-options">
+                            <label class="color-option">
+                                <input type="radio" name="corChapeu" value="vermelho" required>
+                                <span class="color-circle red"></span>
+                                Vermelho
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="corChapeu" value="azul" required>
+                                <span class="color-circle blue"></span>
+                                Azul
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="corChapeu" value="verde" required>
+                                <span class="color-circle green"></span>
+                                Verde
+                            </label>
+                            <label class="color-option">
+                                <input type="radio" name="corChapeu" value="amarelo" required>
+                                <span class="color-circle yellow"></span>
+                                Amarelo
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="start-btn">🎮 Iniciar Jogo</button>
+                </form>
+            </div>
+
+            <div class="instructions">
+                <h3>📋 Instruções</h3>
+                <ul>
+                    <li><strong>Objetivo:</strong> Colete 5 itens da sua cor e chegue à área dourada</li>
+                    <li><strong>Controles:</strong> Use as setas do teclado ou WASD para mover</li>
+                    <li><strong>Poções:</strong> 
+                        <ul>
+                            <li>🟢 Verde: Efeito positivo (teletransporte para item ou congela inimigos)</li>
+                            <li>🔴 Coral: Efeito negativo (teletransporte para longe ou congela você)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Tipos de Gnomo:</strong>
+                        <ul>
+                            <li><strong>Veloz:</strong> Move-se mais rápido, mas pode ter azar</li>
+                            <li><strong>Azarado:</strong> Move-se mais devagar, mas tem mais sorte</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="game-area" id="gameArea" style="display: none;">
+            <div class="game-info">
+                <div class="info-panel">
+                    <div class="player-info">
+                        <h3 id="playerName">Jogador</h3>
+                        <p>Tipo: <span id="playerType">-</span></p>
+                        <p>Cor: <span id="playerColor">-</span></p>
+                    </div>
+                    <div class="game-stats">
+                        <p>Itens Coletados: <span id="itensColetados">0</span>/5</p>
+                        <p>Status: <span id="status">Jogando...</span></p>
+                    </div>
+                </div>
+                <div class="controls-info">
+                    <h4>Controles</h4>
+                    <div class="controls-grid">
+                        <div class="control-key">↑</div>
+                        <div class="control-key">W</div>
+                        <div class="control-key">↓</div>
+                        <div class="control-key">S</div>
+                        <div class="control-key">←</div>
+                        <div class="control-key">A</div>
+                        <div class="control-key">→</div>
+                        <div class="control-key">D</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+
+            <div class="game-controls">
+                <button id="pauseBtn" class="control-btn">⏸️ Pausar</button>
+                <button id="restartBtn" class="control-btn">🔄 Reiniciar</button>
+                <button id="newGameBtn" class="control-btn">🆕 Novo Jogo</button>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h4>🗺️ Legenda do Mapa</h4>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="legend-color" style="background: black;"></span>
+                    Paredes
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: white; border: 1px solid #ccc;"></span>
+                    Caminho
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: gold;"></span>
+                    Linha de Chegada
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: lightgreen;"></span>
+                    Poção Positiva
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: lightcoral;"></span>
+                    Poção Negativa
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background: lightblue;"></span>
+                    Gnomo Congelado
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="jogo.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
